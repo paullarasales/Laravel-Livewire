@@ -8,7 +8,7 @@
     @livewireStyles
 </head>
 <body>
-    <livewire:hello-worls />
+    <livewire:render />
 
     @livewireScripts
 </body>
