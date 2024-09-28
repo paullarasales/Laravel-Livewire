@@ -53,7 +53,7 @@ class StudentCrud extends Component
     {
         $this->validate();
 
-        $stundent = Student::findOrFail($this->student_id);
+        $student = Student::findOrFail($this->student_id);
         $student->update([
             'name' => $this->name,
             'course' => $this->course,
