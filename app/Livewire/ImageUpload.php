@@ -1,42 +1,51 @@
-<?php
+<?php 
 
 namespace App\Livewire;
 
 use Livewire\Component;
+use App\Models\Image;
 use Livewire\WithFileUploads;
 
 class ImageUpload extends Component
 {
     use WithFileUploads;
 
-    public $files = [];
-    public $uploadedFiles = [];
+    public $photos = [];
 
     protected $rules = [
-        'files.*' => 'image|max:2048', // Validate images only, max size 2MB
+        'photos.*' => 'image|max:2048', 
     ];
-
-    public function updatedFiles()
-    {
-        $this->validate();
-    }
-
-    public function save()
-    {
-        foreach ($this->files as $file) {
-            // Store files in the public/uploads directory
-            $filename = $file->getClientOriginalName();  // Get original file name
-            $file->storeAs('uploads', $filename, 'public_path'); // Store files in 'public/uploads'
-
-            $this->uploadedFiles[] = 'uploads/' . $filename; // Save path to display images later
-        }
-
-        // Reset the file input after upload
-        $this->reset('files');
-    }
 
     public function render()
     {
-        return view('livewire.image-upload');
+        $uploadedFiles = Image::all();
+        return view('livewire.image-upload', ['uploadedFiles' => $uploadedFiles]);
     }
+
+    public function resetForm()
+    {
+        $this->photos = [];
+    }
+
+    public function store()
+    {
+        $this->validate();
+
+        $imageName = null;
+
+        if ($this->photo) {
+            $imageName = time() . '.' . $this->photo->getClientOriginalExtension();
+
+            $this->photo->storeAs('images', $imageName, 'public');
+        }
+
+        Image::create([
+            'photo' => $imageName
+        ]);
+
+        session()->flash('status', 'Image uploaded successfully!');
+
+        $this->resetForm();
+    }
+
 }

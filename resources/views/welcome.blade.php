@@ -8,7 +8,7 @@
     @livewireStyles
 </head>
 <body>
-    <livewire:product-crud />
+    <livewire:image-upload />
 
     @livewireScripts
 </body>

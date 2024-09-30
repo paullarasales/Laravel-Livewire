@@ -37,12 +37,16 @@ return [
         ],
         'public' => [
             'driver' => 'local',
-            'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/storage',
+            'root' => public_path('images'),
+            'url' => env('APP_URL') . '/images',
             'visibility' => 'public',
             'throw' => false,
         ],
-
+        'public_images' => [
+            'driver' => 'local',
+            'root' => public_path('images'),
+            'visibility' => 'public'
+        ],
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),
