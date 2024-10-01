@@ -10,6 +10,6 @@ use App\Livewire\ImageUpload;
 
 Route::get('/counter', Counter::class);
 Route::get('/', Render::class);
-Route::get('/students', StudentCrud::class);
+Route::get('/student', StudentCrud::class);
 Route::get('/products', ProductCrud::class);
 Route::get('/image', ImageUpload::class);

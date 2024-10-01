@@ -43,7 +43,7 @@ class ProductCrud extends Component
         if ($this->photo) {
             $imageName = time() . '.' . $this->photo->getClientOriginalExtension();
 
-            $this->photo->storeAs('uploads', $imageName, 'public');
+            $this->photo->storeAs('test', $imageName, 'public');
         }
 
         $product = Product::create([

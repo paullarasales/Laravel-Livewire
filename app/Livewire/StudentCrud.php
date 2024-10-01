@@ -4,10 +4,14 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\Student;
+use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\File;
 
 class StudentCrud extends Component
 {
-    public $students, $name, $course, $student_id;
+    use WithFileUploads;
+
+    public $studentFile, $students, $name, $course, $student_id, $photo;
     public $isUpdate = false;
 
     protected $rules = [
@@ -25,6 +29,7 @@ class StudentCrud extends Component
     {
         $this->name = '';
         $this->course = '';
+        $this->photo = null;
         $this->isUpdate = false;
     }
 
@@ -32,10 +37,29 @@ class StudentCrud extends Component
     {
         $this->validate();
 
-        Student::create([
+        $imageName = null;
+
+        if ($this->photo) {
+            $imageName = time() . '.' . $this->photo->getClientOriginalExtension();
+
+            $this->photo->storeAs(
+                'students', 
+                $imageName,
+                'public'
+            );
+        }
+
+        $studentFile = Student::create([
             'name' => $this->name,
-            'course' => $this->course
+            'course' => $this->course,
+            'photo' => $imageName
         ]);
+
+        if ($studentFile) {
+            session->flash('status', 'Student data uploaded successfully!');
+        } else {
+            session->flash('status', 'Student data failed to upload, Please try again!');
+        }
 
         $this->resetForm();
     }
@@ -46,6 +70,7 @@ class StudentCrud extends Component
         $this->student_id = $id;
         $this->name = $student->name;
         $this->course = $student->course;
+        $this->photo = $student->photo;
         $this->isUpdate = true;
     }
 
@@ -54,9 +79,22 @@ class StudentCrud extends Component
         $this->validate();
 
         $student = Student::findOrFail($this->student_id);
+        $imageName = $student->photo;
+
+        if ($this->photo) {
+            if ($student->photo && File::exists(public_path('students/' . $student->photo))) {
+                File::delete(public_path('students/' . $student->photo));
+            }
+
+            $imageName = time() . '.' . $this->photo->getClientOriginalExtension();
+
+            $this->photo->storeAs('students', $imageName, 'public');
+        }
+
         $student->update([
             'name' => $this->name,
             'course' => $this->course,
+            'photo' => $imageName
         ]);
 
         $this->resetForm();

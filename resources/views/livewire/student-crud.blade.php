@@ -1,4 +1,10 @@
 <div>
+    <style>
+        img {
+            height: 100px;
+            width: 100px;
+        }
+    </style>
    <h1>Student Managements</h1>
     
    <form wire:submit.prevent="{{ $isUpdate ? 'update' : 'store'}}">
@@ -19,6 +25,18 @@
         </div>
 
         <div>
+            <label>Profile Pic</label>
+            <input type="file" wire:model="photo">
+            @error('photo')
+                <span>{{ $message }}</span>
+            @enderror
+
+            @if ($photo)
+                <img src="{{ $photo->temporaryUrl() }}" width="100">
+            @endif
+        </div>
+
+        <div>
             <button type="submit">{{ $isUpdate ? 'Update' : 'Save'}}</button>
             <button type="button" wire:click="resetForm">Clear</button>
         </div>
@@ -30,6 +48,7 @@
         <table border="1">
             <thead>
                 <tr>
+                    <th>Profile</th>
                     <th>Name</th>
                     <th>Course</th>
                     <th>Actions</th>
@@ -38,6 +57,9 @@
             <tbody>
                 @foreach ($students as $student)
                     <tr>
+                        <td>
+                            <img src="{{ asset('students/' . $student->photo)}}" alt="No Profile">
+                        </td>
                         <td>{{ $student->name }}</td>
                         <td>{{ $student->course}}</td>
                         <td>

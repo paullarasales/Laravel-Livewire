@@ -10,10 +10,10 @@ class ImageUpload extends Component
 {
     use WithFileUploads;
 
-    public $photos = [];
+    public $photoFile, $photo;
 
     protected $rules = [
-        'photos.*' => 'image|max:2048', 
+        'photo' => 'image|max:2048', 
     ];
 
     public function render()
@@ -24,7 +24,7 @@ class ImageUpload extends Component
 
     public function resetForm()
     {
-        $this->photos = [];
+        $this->photo = null;
     }
 
     public function store()
@@ -39,7 +39,7 @@ class ImageUpload extends Component
             $this->photo->storeAs('images', $imageName, 'public');
         }
 
-        Image::create([
+        $photoFile = Image::create([
             'photo' => $imageName
         ]);
 

@@ -1,4 +1,11 @@
 <div>
+    <style>
+        img {
+            height: 100px;
+            width: 100px;
+        }
+    </style>
+
     <h1>Product Management</h1>
 
     <form wire:submit.prevent="{{ $isUpdate ? 'update' : 'store'}}" enctype="multipart/form-data">
@@ -38,6 +45,7 @@
     </form>
 
         <h2>Product List</h2>
+        
     
         @if($products->isEmpty())
             <p>No products available.</p>
@@ -57,11 +65,8 @@
                             <td>{{ $product->product_name }}</td>
                             <td>{{ $product->description }}</td>
                             <td>
-                                @if($product->photo)
-                                    <img src="{{ asset('uploads/' . $product->photo) }}" alt="{{ $product->product_name }}" width="100">
-                                @else
-                                    No image
-                                @endif
+                               {{-- <img src="{{ asset('uploads/'. $product->photo)}}" alt="No Image"> --}}
+                               <img src="{{ asset('test/' . $product->photo)}}" alt="Not Found" style='width="100px"; height="100px";'>
                             </td>
                             <td>
                                 <!-- Add actions like Edit and Delete -->
